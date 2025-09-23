@@ -71,6 +71,7 @@
         display: flex;
         flex-direction: column;
         flex-grow: 1;
+        padding-bottom: 100px;
       }
 
       /* Tambahkan ini juga */
@@ -155,12 +156,20 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        transition: all 0.2s ease-in-out;
+        transition: background-color 0.1s ease, color 0.1s ease;
         border: 1px solid transparent;
       }
       .coin-option.selected {
         border: 1px solid #fe2c55;
         background-color: #ffebee;
+      }
+      * {
+        -webkit-tap-highlight-color: transparent;
+      }
+      .coin-option:focus,
+      .coin-option:active {
+        outline: none;
+        box-shadow: none;
       }
       .coin-option:hover {
         border: 1px solid #ccc;
@@ -214,7 +223,10 @@
         }
       }
       footer {
-        padding: 15px;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        padding: 15px 10px;
         background-color: #fff;
         /* position: sticky dan bottom: 0 dihapus */
         width: 100%;
@@ -223,7 +235,13 @@
         flex-direction: column;
         gap: 10px;
         box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.05);
-        z-index: 10;
+        z-index: 999;
+
+        footer .total {
+          margin-bottom: 8px;
+          font-size: 14px;
+          text-align: center;
+        }
       }
       @media screen and (max-width: 480px) {
         footer {
@@ -242,7 +260,11 @@
         font-weight: 600;
       }
       .recharge-button {
+        position: fixed;
+        bottom: 0; /* tempel di bawah layar */
+        left: 0;
         width: 100%;
+        z-index: 1000; /* selalu di atas konten lain */
         background-color: #fe2c55;
         color: #ffffff;
         padding: 12px 25px;
@@ -255,6 +277,8 @@
         justify-content: center;
         cursor: pointer;
         transition: background-color 0.2s;
+        outline: none;
+        text-align: center;
       }
       .recharge-button:hover {
         background-color: #d12046;
@@ -364,7 +388,6 @@
         margin: 20px 0;
       }
       #custom-page .keypad button {
-        -webkit-user-select: none;
         -webkit-tap-highlight-color: transparent; /* hilangkan highlight biru */
         color: #000; /* warna normal */
         background-color: #f0f2f5;
@@ -1317,10 +1340,11 @@
           localStorage.setItem("tiktokBalance", currentBalance.toString());
         }
         coinOptions.forEach((option) => {
-          option.addEventListener("click", function () {
+          option.addEventListener("pointerdown", function () {
             updateSelection(this);
           });
         });
+
         const defaultSelected = document.querySelector(".coin-option.selected");
         if (defaultSelected) {
           updateSelection(defaultSelected);
