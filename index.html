@@ -364,6 +364,9 @@
         margin: 20px 0;
       }
       #custom-page .keypad button {
+        -webkit-user-select: none;
+        -webkit-tap-highlight-color: transparent; /* hilangkan highlight biru */
+        color: #000; /* warna normal */
         background-color: #f0f2f5;
         border: none;
         border-radius: 1px; /* Sudut diubah menjadi lebih tajam */
@@ -1098,7 +1101,7 @@
           <span class="back-arrow" id="back-to-main">&#x276E;</span>
           <h1>Custom</h1>
           <div class="header-icons">
-            <span style="width: 20px; height: 20px; cursor: pointer">?</span>
+            <img src="help-icon.svg" alt="Help Icon" class="icon-img" />
           </div>
         </header>
         <div class="content">
