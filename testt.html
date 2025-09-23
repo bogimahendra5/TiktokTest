@@ -1,0 +1,1445 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap" rel="stylesheet" />
+    <title>Get Coins</title>
+    <style>
+      /* --- KODE CSS ANDA YANG SUDAH ADA --- */
+      body {
+        font-family: "Roboto", sans-serif;
+        background-color: #f0f2f5;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+      }
+      .container {
+        background-color: #f8f8f8;
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        position: relative; /* PENTING: Agar #custom-page menempel di sini */
+        overflow: hidden; /* PENTING: Menyembunyikan elemen yang keluar dari wadah */
+      }
+      @media screen and (max-width: 480px) {
+        .container {
+          margin: 0;
+          max-width: 100%;
+        }
+      }
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        position: relative;
+      }
+      header h1 {
+        font-size: 18px;
+        font-weight: 600;
+        color: #ffffff;
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        margin: 0;
+      }
+      .header-icons {
+        margin-left: auto;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+      }
+      header .icon {
+        font-size: 22px;
+        color: #ffffff;
+        cursor: pointer;
+        font-weight: bold;
+      }
+
+      /* Tambahkan ini */
+      #main-page {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+      }
+
+      /* Tambahkan ini juga */
+      #main-page main {
+        flex-grow: 1;
+      }
+      .section {
+        padding: 15px;
+        margin-bottom: 8px;
+        background-color: #fff;
+      }
+      .section:first-child {
+        margin-top: 50px;
+        border-radius: 0;
+        position: relative;
+        z-index: 1;
+        background-color: rgba(255, 255, 255, 0.95);
+      }
+      .section:not(:first-child) {
+        border-radius: 8px;
+        margin: 0 8px 8px 8px;
+      }
+      .section-title {
+        font-size: 16px;
+        font-weight: 550;
+        color: #333;
+        margin-bottom: 10px;
+      }
+      .balance {
+        display: flex;
+        align-items: center;
+        font-size: 20px;
+        font-weight: 600;
+        color: #333;
+      }
+      /* Tambahkan CSS ini untuk mengatur ukuran ikon SVG di header */
+      .icon-img {
+        width: 20px; /* Atur lebar ikon sesuai keinginan */
+        height: 20px; /* Atur tinggi ikon sesuai keinginan */
+        cursor: pointer;
+      }
+      .balance img {
+        height: 20px;
+        margin-right: 5px;
+      }
+      .recharge-info {
+        font-size: 12px;
+        color: #ff0000;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+      }
+      .recharge-info .info-icon {
+        margin-left: 5px;
+        border: 1px solid #e64a19;
+        border-radius: 50%;
+        width: 14px;
+        height: 14px;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 10px;
+        line-height: 1;
+      }
+      .coin-options {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      @media screen and (max-width: 360px) {
+        .coin-options {
+          grid-template-columns: repeat(2, 1fr);
+        }
+      }
+      .coin-option {
+        background-color: #f7f7f7;
+        border-radius: 8px;
+        padding: 15px 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s ease-in-out;
+        border: 1px solid transparent;
+      }
+      .coin-option.selected {
+        border: 1px solid #fe2c55;
+        background-color: #ffebee;
+      }
+      .coin-option:hover {
+        border: 1px solid #ccc;
+      }
+      .coin-option.selected:hover {
+        border: 1px solid #fe2c55;
+      }
+      .coin-option .coins {
+        display: flex;
+        align-items: center;
+        font-size: 16px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 5px;
+      }
+      .coin-option .coins img {
+        height: 16px;
+        margin-right: 3px;
+      }
+      .coin-option .price {
+        font-size: 12px;
+        color: #666;
+      }
+      .coin-option.custom .coins {
+        font-size: 16px;
+      }
+      .coin-option.custom .price {
+        font-size: 11px;
+        text-align: center;
+        line-height: 1.2;
+      }
+      .payment-methods {
+        display: flex;
+        justify-content: flex-start;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: -10px;
+        padding: 0 10px;
+      }
+      .payment-methods img {
+        height: 29px;
+        border: none;
+        border-radius: 0px;
+        width: auto;
+        max-width: 100%;
+        object-fit: contain;
+      }
+      @media screen and (max-width: 480px) {
+        .payment-methods {
+          justify-content: flex-start;
+        }
+      }
+      footer {
+        padding: 15px;
+        background-color: #fff;
+        /* position: sticky dan bottom: 0 dihapus */
+        width: 100%;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.05);
+        z-index: 10;
+      }
+      @media screen and (max-width: 480px) {
+        footer {
+          padding: 15px 10px;
+        }
+      }
+      .total {
+        font-size: 16px;
+        color: #333;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .total strong {
+        font-size: 18px;
+        font-weight: 600;
+      }
+      .recharge-button {
+        position: relative;
+        background-color: #fe2c55;
+        color: #ffffff;
+        padding: 12px 25px;
+        border-radius: 4px;
+        border: none;
+        font-size: 16px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background-color 0.2s;
+        overflow: hidden;
+      }
+      .recharge-button:hover {
+        background-color: #d12046;
+      }
+      input::placeholder {
+        color: #aaaaaa;
+      }
+
+      /* --- CSS BARU UNTUK BACKDROP DAN POPUP CUSTOM --- */
+
+      /* Backdrop untuk menggelapkan latar belakang */
+      #backdrop {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5); /* Hitam transparan */
+        z-index: 99;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+      }
+      #backdrop.visible {
+        opacity: 1;
+      }
+
+      /* Mengubah #custom-page menjadi popup setengah layar */
+      #custom-page {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 65vh;
+        background-color: #ffffff;
+        z-index: 100;
+        display: flex;
+        flex-direction: column;
+
+        /* TAMBAHKAN DUA BARIS INI untuk sudut melengkung */
+        border-top-left-radius: 16px;
+        border-top-right-radius: 16px;
+
+        transform: translateY(100%);
+        transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+      }
+      #custom-page.visible {
+        /* Pindah ke posisi 0 (masuk ke layar) */
+        transform: translateY(0);
+      }
+      #custom-page header {
+        background-color: #fff;
+        border-bottom: 1px solid #eee;
+        color: #333;
+      }
+      #custom-page header .back-arrow {
+        font-size: 20px;
+        font-weight: semi-bold;
+        color: #333;
+        cursor: pointer;
+      }
+      #custom-page header h1 {
+        color: #333;
+      }
+      #custom-page header .icon.help {
+        border-color: #333;
+      }
+      /* Cari blok CSS ini */
+      #custom-page .content {
+        flex-grow: 1;
+        /* HAPUS ATAU BERI KOMENTAR PADA BARIS DI BAWAH INI */
+        /* overflow-y: auto; */
+        padding: 15px;
+      }
+      #custom-page .input-label {
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 8px;
+      }
+      #custom-page .coin-input-container {
+        border: 1px solid #ccc;
+        border-radius: 2px;
+        padding: 12px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 5px;
+        background-color: #fff;
+      }
+      #custom-page .coin-input-container img {
+        height: 20px;
+        margin-right: 8px;
+      }
+      #custom-page #custom-coin-display {
+        font-size: 20px;
+        font-weight: 600;
+        color: #333;
+        flex-grow: 1;
+      }
+      #custom-page #custom-price-display {
+        font-size: 12px;
+        color: #666;
+        padding-left: 5px;
+      }
+      #custom-page .keypad {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 10px;
+        margin: 20px 0;
+      }
+      #custom-page .keypad button {
+        background-color: #f0f2f5;
+        border: none;
+        border-radius: 1px; /* Sudut diubah menjadi lebih tajam */
+        padding: 15px 0;
+        font-size: 20px;
+        font-weight: 500;
+        cursor: pointer;
+        box-shadow: none;
+      }
+      #custom-page .keypad button:active {
+        background-color: #eee;
+      }
+      #custom-page .content {
+        flex-grow: 1; /* Membuat konten mengisi ruang kosong */
+        overflow-y: auto; /* Jika konten panjang, hanya bagian ini yang scroll */
+        padding: 15px;
+      }
+      #custom-page footer {
+        margin-top: auto; /* Mendorong footer ke bawah */
+        /* Pastikan tidak ada position: sticky di sini */
+        position: relative;
+        box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.05);
+      }
+      #custom-page .special-offer {
+        color: #666;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 11px;
+        margin-bottom: 0px;
+      }
+      #custom-page .special-offer a {
+        color: #fe2c55;
+        text-decoration: none;
+        font-weight: 500;
+      }
+      #custom-page .total-section {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 16px;
+        font-weight: 600;
+        margin-bottom: 0px;
+      }
+
+      /* --- CSS BARU UNTUK POPUP ORDER SUMMARY --- */
+      /* Ganti definisi .hidden yang lama */
+      .hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      #order-summary-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6);
+        z-index: 1000;
+        transition: opacity 0.1s ease; /* Tambahkan transisi */
+      }
+      #order-summary-backdrop.visible {
+        opacity: 1;
+        pointer-events: auto;
+      }
+      #order-summary-modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        width: 90%;
+        max-width: 380px;
+        background-color: #fff;
+        border-radius: 8px;
+        z-index: 1001;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        font-family: "Roboto", sans-serif;
+        /* Properti baru untuk animasi */
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.95);
+        transition: opacity 0.1s ease, transform 0.1s ease;
+        pointer-events: none;
+      }
+      /* Kelas baru untuk menampilkan modal */
+      #order-summary-modal.visible {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+        pointer-events: auto;
+      }
+      .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+      }
+      .modal-header h2 {
+        margin: 0;
+        font-size: 16px;
+      }
+      #close-modal-button {
+        font-size: 28px;
+        font-weight: lighter;
+        cursor: pointer;
+      }
+      .modal-secure-note {
+        font-size: 9px; /* Sedikit dikecilkan agar pas */
+        color: #00796b; /* Warna teks tetap */
+        display: flex;
+        align-items: center;
+        gap: 1px;
+        padding: 0; /* Hapus padding */
+        margin: 4px 0 0 0; /* Beri sedikit jarak dari judul */
+        background-color: transparent; /* Hapus latar belakang hijau */
+      }
+      .modal-section {
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+        font-size: 13px;
+        font-weight: 400;
+      }
+      .modal-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 13px;
+      }
+      .modal-row.subtext {
+        font-size: 10px;
+        color: #373737;
+        margin-top: 4px;
+        font-weight: 350;
+      }
+      .payment-options {
+        margin-top: 10px;
+      }
+      .payment-option {
+        display: flex;
+        align-items: center;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        cursor: pointer;
+      }
+      .payment-option:has(input:checked) {
+        border-color: #fe2c55;
+        background-color: #ffebee;
+      }
+      .payment-option input {
+        margin-right: 10px;
+      }
+      .payment-option span {
+        flex-grow: 1;
+        font-size: 12px;
+        font-weight: 450;
+      }
+
+      .payment-method-name {
+        font-size: 12px;
+        font-weight: 500;
+        /* Menjaga teks ini tetap di kiri */
+      }
+
+      .linked-account-info {
+        flex-grow: 1; /* PENTING: Membuat elemen ini mengisi ruang kosong di tengah */
+        text-align: center; /* Membuat teks di dalamnya menjadi rata tengah */
+        font-size: 10px;
+        color: #666;
+        padding-right: 50px;
+      }
+
+      .modal-footer {
+        padding: 15px;
+        background-color: #f8f8f8;
+        border-bottom-left-radius: 8px;
+        border-bottom-right-radius: 8px;
+      }
+      .terms-note {
+        font-size: 12px;
+        color: #666; /* Warna sedikit lebih gelap */
+        line-height: 1.5; /* Jarak antar baris agar lebih mudah dibaca */
+        margin: 0 0 15px 0;
+      }
+
+      .terms-note strong {
+        color: #333; /* Warna teks bold lebih gelap */
+      }
+
+      /* Gaya baru untuk konfirmasi negara */
+      .country-confirmation {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px; /* Jarak sebelum tombol Pay now */
+      }
+
+      .dropdown-arrow {
+        font-size: 10px;
+        color: #333;
+        margin-left: 8px;
+      }
+
+      #pay-now-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        padding: 12px;
+        border: none;
+        border-radius: 4px;
+        font-size: 16px;
+        font-weight: 600;
+        color: #fff;
+        background-color: #ccc; /* Warna saat nonaktif */
+        cursor: not-allowed;
+        transition: background-color 0.2s;
+      }
+      #pay-now-button:not(:disabled) {
+        background-color: #fe2c55; /* Warna saat aktif */
+        cursor: pointer;
+      }
+      /* CSS baru untuk membuat label di modal lebih tebal */
+      .modal-row > span:first-child {
+        font-weight: 600;
+      }
+
+      /* --- CSS BARU UNTUK LOADING DI DALAM TOMBOL --- */
+      .recharge-button,
+      #pay-now-button {
+        position: relative; /* Penting untuk posisi spinner */
+        transition: background-color 0.2s, color 0.2s;
+      }
+
+      /* Gaya untuk spinner di dalam tombol */
+      .button-spinner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.4);
+        border-top: 3px solid #ffffff;
+        border-radius: 50%;
+        /* Ganti 'linear' menjadi 'ease-in-out' dan sesuaikan durasi */
+        animation: spin 0.8s ease-in-out infinite;
+        display: none;
+      }
+
+      /* Kelas 'loading' yang akan kita tambahkan via JS */
+      .button--loading .button-spinner {
+        display: block; /* Tampilkan spinner */
+      }
+      .button--loading .button-text {
+        visibility: hidden; /* Sembunyikan teks */
+      }
+      .button--loading {
+        cursor: wait; /* Ubah cursor saat loading */
+      }
+
+      /* CSS BARU untuk detail akun di popup */
+      .account-details {
+        display: flex;
+        align-items: center;
+        gap: 6px; /* Jarak antara ikon dan teks */
+      }
+
+      .profile-icon {
+        width: 30px;
+        height: 30px;
+      }
+
+      /* --- CSS BARU UNTUK VALIDASI USERNAME --- */
+      .error-indicator {
+        color: #fe2c55; /* Warna merah */
+        font-size: 24px;
+        font-weight: bold;
+        margin-left: 8px;
+      }
+
+      /* Gaya untuk input saat terjadi error */
+      input.input-error {
+        border-color: #fe2c55 !important; /* Border menjadi merah */
+      }
+
+      * --- CSS UPDATE UNTUK MODAL PAYMENT PROCESSING MIRIP SUCCESS --- */ #payment-processing-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6); /* Sama dengan success backdrop */
+        z-index: 2000;
+        transition: opacity 0.3s ease;
+        opacity: 0;
+        pointer-events: none;
+      }
+
+      #payment-processing-backdrop.visible {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+
+      #payment-processing-modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%) scale(0.9);
+        background: #fff; /* Sama dengan success modal */
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        z-index: 2001;
+        width: 90%;
+        max-width: 400px;
+        text-align: center;
+        opacity: 0;
+        transition: opacity 0.2s ease, transform 0.2s ease;
+      }
+
+      #payment-processing-modal.visible {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+        visibility: visible;
+      }
+
+      /* Spinner dimodifikasi biar matching icon centang */
+      .processing-gif {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 20px;
+        display: block;
+        object-fit: contain; /* biar nggak gepeng */
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .processing-title {
+        font-size: 20px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin: 15px 0 10px 0;
+      }
+
+      .processing-subtitle {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 25px;
+        line-height: 1.4;
+      }
+
+      .countdown-timer {
+        font-size: 20px;
+        font-weight: 700;
+        color: #b1b0b0;
+        background: rgb(129, 129, 129);
+        padding: 10px 16px;
+        border-radius: 8px;
+        margin: 0 auto;
+        display: inline-block;
+        min-width: 100px;
+      }
+
+      /* Responsive match dengan success modal */
+      @media (max-width: 600px) {
+        #payment-processing-modal {
+          width: 85%;
+
+          padding: 15px;
+        }
+
+        .processing-title {
+          font-size: 16px;
+          margin: 8px 0;
+        }
+
+        .processing-subtitle {
+          font-size: 12px;
+          margin-bottom: 15px;
+        }
+
+        .countdown-timer {
+          font-size: 16px;
+          padding: 8px 12px;
+        }
+
+        .processing-spinner {
+          width: 50px;
+          height: 50px;
+        }
+      }
+
+      /* --- CSS BARU UNTUK MODAL SUKSES --- */
+      /* GANTI SEMUA CSS #success-backdrop DENGAN INI */
+
+      #success-backdrop {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.6); /* Shadow/overlay gelap */
+        z-index: 2000; /* Di bawah modal sukses */
+        transition: opacity 0.3s ease;
+        opacity: 0;
+        /*visibility: hidden;*/
+        pointer-events: none;
+      }
+
+      #success-backdrop.visible {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+      }
+
+      #success-modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: #fff;
+        padding: 2rem;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        z-index: 2001;
+        width: 90%;
+        max-width: 400px;
+        text-align: center;
+      }
+
+      #success-modal.visible {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+        visibility: visible;
+      }
+
+      /* Menghilangkan margin & padding bawaan browser */
+      body,
+      html {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #f8f8f8;
+        overflow-x: hidden; /* Tambahkan ini */
+      }
+
+      /* Kelas 'visible' untuk menampilkan modal */
+      #success-modal.visible {
+        opacity: 1;
+        visibility: visible;
+        pointer-events: auto;
+        transform: translate(-50%, -50%) scale(1);
+      }
+
+      #success-modal .close-button {
+        position: absolute;
+        top: 10px;
+        right: 15px;
+        font-size: 28px;
+        font-weight: lighter;
+        color: #aaa;
+        cursor: pointer;
+      }
+
+      #success-modal h2 {
+        font-size: 20px;
+        font-weight: 600;
+        color: #1a1a1a;
+        margin: 15px 0 10px 0;
+      }
+
+      #success-modal p {
+        font-size: 14px;
+        color: #666;
+        line-height: 1.5;
+        margin-bottom: 25px;
+      }
+
+      #success-modal #go-back-button {
+        width: 100%;
+        background-color: #fe2c55;
+        color: #ffffff;
+        padding: 12px;
+        border-radius: 4px;
+        border: none;
+        font-size: 16px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color 0.2s;
+      }
+
+      #success-modal #go-back-button:hover {
+        background-color: #d12046;
+      }
+
+      /* Animasi untuk ikon centang */
+      .success-icon {
+        margin: 0 auto;
+        width: 80px;
+        height: 80px;
+      }
+      .checkmark {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        display: block;
+        stroke-width: 3;
+        stroke: #4caf50;
+        stroke-miterlimit: 10;
+        margin: 0 auto;
+      }
+      .checkmark-circle {
+        stroke-dasharray: 166;
+        stroke-dashoffset: 166;
+        stroke-width: 2;
+        stroke-miterlimit: 10;
+        stroke: #ccc;
+        fill: none;
+        animation: stroke 0.6s cubic-bezier(0.65, 0, 0.45, 1) forwards;
+      }
+      .checkmark-check {
+        transform-origin: 50% 50%;
+        stroke-dasharray: 48;
+        stroke-dashoffset: 48;
+        animation: stroke 0.3s cubic-bezier(0.65, 0, 0.45, 1) 0.8s forwards;
+      }
+      @keyframes stroke {
+        100% {
+          stroke-dashoffset: 0;
+        }
+      }
+
+      /* --- CSS FINAL UNTUK MODAL SUKSES RESPONSIF --- */
+      /* --- CSS FINAL V2 UNTUK MODAL SUPER RINGKAS --- */
+      @media (max-height: 1000px), (max-width: 400px) {
+        #success-modal {
+          /* Tambah space kiri-kanan dengan mengurangi lebar */
+          width: 85%;
+
+          padding: 15px 15px 12px 15px; /* Padding dikecilkan lagi */
+          max-height: 95vh;
+          overflow-y: auto;
+        }
+
+        .success-icon,
+        .checkmark {
+          width: 45px; /* Ikon super kecil */
+          height: 45px;
+        }
+
+        #success-modal h2 {
+          font-size: 16px;
+          margin: 5px 0;
+        }
+
+        #success-modal p {
+          font-size: 12px;
+          margin-bottom: 12px;
+        }
+
+        #success-modal #go-back-button {
+          padding: 9px;
+          font-size: 14px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <div id="main-page">
+        <main>
+          <img
+            src="header.jpeg"
+            alt="Header and Secure Payment"
+            style="width: 100%; height: auto; object-fit: cover; display: block; margin-bottom: -5px; position: relative; z-index: 2"
+          />
+          <div class="section">
+            <div class="section-title">Balance:</div>
+            <div class="balance">
+              <img src="coin.png" alt="TikTok Coin icon" />
+              0
+            </div>
+            <div class="username-field" style="margin-top: 15px; display: flex; align-items: center">
+              <input
+                id="username-input"
+                type="text"
+                placeholder="Enter Username"
+                style="
+                  font-size: 13px;
+                  color: #1a1a1a;
+                  padding: 12px 12px;
+                  border: 1px solid transparent;
+                  border-radius: 4px;
+                  flex-grow: 1;
+                  outline: none;
+                  background-color: #f7f7f7;
+                  transition: border-color 0.2s;
+                "
+              />
+              <span id="username-error" class="error-indicator hidden">!</span>
+            </div>
+          </div>
+          <div class="section">
+            <div class="section-title">Recharge</div>
+            <div class="recharge-info">
+              Save around 25% with a lower third-party service fee.
+              <span class="info-icon">&#x24D8;</span>
+            </div>
+            <div class="coin-options">
+              <div class="coin-option" data-price="$0.74" data-coins="70">
+                <div class="coins"><img src="coin.png" alt="TikTok Coin icon" /> 70</div>
+                <div class="price">$0.74</div>
+              </div>
+              <div class="coin-option" data-price="$3.7" data-coins="350">
+                <div class="coins"><img src="coin.png" alt="Coin icon" /> 350</div>
+                <div class="price">$3.7</div>
+              </div>
+              <div class="coin-option" data-price="$7.4" data-coins="700">
+                <div class="coins"><img src="coin.png" alt="Coin icon" /> 700</div>
+                <div class="price">$7.4</div>
+              </div>
+              <div class="coin-option" data-price="$14.8" data-coins="1,400">
+                <div class="coins"><img src="coin.png" alt="Coin icon" /> 1,400</div>
+                <div class="price">$14.8</div>
+              </div>
+              <div class="coin-option selected" data-price="$37" data-coins="3,500">
+                <div class="coins"><img src="coin.png" alt="Coin icon" /> 3,500</div>
+                <div class="price">$37</div>
+              </div>
+              <div class="coin-option" data-price="$74" data-coins="7,000">
+                <div class="coins"><img src="coin.png" alt="Coin icon" /> 7,000</div>
+                <div class="price">$74</div>
+              </div>
+              <div class="coin-option" data-price="$185" data-coins="17,500">
+                <div class="coins"><img src="coin.png" alt="Coin icon" /> 17,500</div>
+                <div class="price">$185</div>
+              </div>
+              <div class="coin-option custom">
+                <div class="coins">Custom</div>
+              </div>
+            </div>
+            <div class="payment-methods">
+              <img src="brand.png" alt="Payment Methods" style="max-width: 300px" />
+            </div>
+          </div>
+        </main>
+        <footer>
+          <div class="total">Total <strong id="total-price">$37</strong></div>
+          <button class="recharge-button">
+            <span class="button-text">Recharge</span>
+            <div class="button-spinner"></div>
+          </button>
+        </footer>
+      </div>
+
+      <div id="order-summary-backdrop" class="hidden"></div>
+      <div id="order-summary-modal" class="hidden">
+        <div class="modal-header">
+          <div>
+            <h2>Order summary</h2>
+            <p class="modal-secure-note">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"></path>
+              </svg>
+              Your info is private and secure.
+            </p>
+          </div>
+          <span id="close-modal-button">&times;</span>
+        </div>
+
+        <div class="modal-section">
+          <div class="modal-row">
+            <span>Account</span>
+            <div class="account-details">
+              <img src="profilefix.jpg" alt="Profile" class="profile-icon" />
+              <span id="modal-account-name">@username</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-section">
+          <div class="modal-row">
+            <strong>Total</strong>
+            <strong id="modal-total-price">$0.00</strong>
+          </div>
+          <div class="modal-row subtext">
+            <span id="modal-coin-amount">0 Coins</span>
+            <span id="modal-subtotal-price">$0.00</span>
+          </div>
+        </div>
+
+        <div class="modal-section">
+          <strong>Payment method</strong>
+          <div class="payment-options">
+            <label class="payment-option">
+              <input type="radio" name="payment" value="card" />
+              <span>Add Credit Or Debit Card</span>
+              <img src="brandpayment.png" alt="Card Brands" style="height: 20px" />
+            </label>
+            <label class="payment-option">
+              <input type="radio" name="payment" value="paypal" checked />
+              <span class="payment-method-name">PayPal</span>
+              <span class="linked-account-info">*********65@gmail.com</span>
+              <img src="paypallogo.jpg" alt="PayPal Logo" style="height: 20px" />
+            </label>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <p class="terms-note">
+            By tapping <strong>Pay</strong>, you agree to our <strong>Virtual Items Policy</strong> and acknowledge that you have read
+            <strong>TikTok Privacy Policy</strong>. By using any amount of Coins within 14 days after the purchase, you acknowledge and confirm that you
+            will no longer be eligible for a refund.
+          </p>
+
+          <button id="pay-now-button">
+            <span class="button-text">Pay now</span>
+            <div class="button-spinner"></div>
+          </button>
+        </div>
+      </div>
+
+      <div id="backdrop" class="hidden"></div>
+
+      <div id="custom-page">
+        <header>
+          <span class="back-arrow" id="back-to-main">&#x276E;</span>
+          <h1>Custom</h1>
+          <div class="header-icons">
+            <img src="help-icon.svg" alt="Help Icon" class="icon-img" />
+          </div>
+        </header>
+        <div class="content">
+          <div class="input-label">Number of Coins</div>
+          <div class="coin-input-container">
+            <img src="coin.png" alt="Coin icon" />
+            <div id="custom-coin-display">0</div>
+          </div>
+          <p id="custom-price-display">$0.00</p>
+          <div class="keypad">
+            <button>1</button>
+            <button>2</button>
+            <button>3</button>
+            <button data-action="backspace">⌫</button>
+            <button>4</button>
+            <button>5</button>
+            <button>6</button>
+            <button>000</button>
+            <button>7</button>
+            <button>8</button>
+            <button>9</button>
+            <button>0</button>
+          </div>
+        </div>
+        <footer>
+          <div class="special-offer">
+            <span>Special offer</span>
+            <a href="#">Unlock 5% cash back ></a>
+          </div>
+          <div class="total-section">
+            <span>Total</span>
+            <span id="custom-total-price">$0.00</span>
+          </div>
+          <button class="recharge-button" id="custom-recharge-button">
+            <span class="button-text">Recharge</span>
+            <div class="button-spinner"></div>
+          </button>
+        </footer>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // === ELEMEN & VARIABEL ===
+        // === (Tambahkan ini di atas) ===
+        const successBackdrop = document.getElementById("success-backdrop");
+        const successModal = document.getElementById("success-modal");
+        const successMessage = document.getElementById("success-message");
+        const goBackButton = document.getElementById("go-back-button");
+        const closeSuccessModalButton = document.getElementById("close-success-modal");
+        const mainPage = document.getElementById("main-page");
+        const usernameInput = document.getElementById("username-input");
+        const usernameError = document.getElementById("username-error"); // Elemen error baru
+        const coinOptions = document.querySelectorAll(".coin-option:not(.custom)");
+        const totalPriceElement = document.getElementById("total-price");
+        const mainRechargeButton = document.querySelector("#main-page .recharge-button");
+        const customButton = document.querySelector(".coin-option.custom");
+        let currentBalance = parseInt(localStorage.getItem("tiktokBalance")) || 0;
+
+        // === (Tambahkan fungsi baru ini di script Anda) ===
+        function showSuccessModal(coins, username) {
+          // === TAMBAHKAN KODE INI ===
+          // Pindahkan backdrop dan modal ke root <body> untuk melepaskannya dari .container
+          document.body.appendChild(successBackdrop);
+          document.body.appendChild(successModal);
+
+          // Update pesan
+          successMessage.textContent = `You recharged ${coins.toLocaleString()} coins to ${username}'s account. You can use coins to send virtual gifts to creators.`;
+
+          // Hapus .hidden untuk mengubah display dari 'none' menjadi 'block'
+          successBackdrop.classList.remove("hidden");
+          successModal.classList.remove("hidden");
+
+          // Beri jeda sesaat agar browser sempat 'melihat' elemennya sebelum memulai transisi
+          setTimeout(() => {
+            successBackdrop.classList.add("visible");
+            successModal.classList.add("visible");
+          }, 20);
+        }
+
+        function closeSuccessModal() {
+          successBackdrop.classList.remove("visible");
+          successModal.classList.remove("visible");
+
+          setTimeout(() => {
+            successBackdrop.classList.add("hidden");
+            successModal.classList.add("hidden");
+          }, 150); // Sesuaikan dengan durasi transisi CSS
+        }
+
+        // Tambahkan event listener untuk tombol-tombolnya
+        goBackButton.addEventListener("click", function () {
+          // 1. Panggil fungsi yang sudah ada untuk menutup modal sukses
+          closeSuccessModal();
+
+          // 2. Kosongkan (reset) kolom input username
+          usernameInput.value = "";
+
+          // 3. (Opsional tapi direkomendasikan) Pastikan halaman custom juga tertutup
+          //    jika pembayaran berasal dari sana, dan reset nilainya.
+          if (customPage.classList.contains("visible")) {
+            closeCustomPage();
+          }
+        });
+
+        // GANTI baris di atas dengan kode di bawah ini:
+        closeSuccessModalButton.addEventListener("click", function () {
+          // 1. Panggil fungsi yang ada untuk menutup modal sukses
+          closeSuccessModal();
+
+          // 2. Kosongkan (reset) kolom input username
+          usernameInput.value = "";
+
+          // 3. Pastikan halaman custom juga tertutup jika pembayaran berasal dari sana
+          if (customPage.classList.contains("visible")) {
+            closeCustomPage();
+          }
+        });
+
+        // === FUNGSI VALIDASI BARU ===
+        function validateUsername() {
+          if (usernameInput.value.trim() === "") {
+            usernameInput.classList.add("input-error");
+            usernameError.classList.remove("hidden");
+            return false; // Gagal validasi
+          } else {
+            usernameInput.classList.remove("input-error");
+            usernameError.classList.add("hidden");
+            return true; // Lolos validasi
+          }
+        }
+
+        // Hapus error saat pengguna mulai mengetik
+        usernameInput.addEventListener("input", validateUsername);
+
+        // === FUNGSI HALAMAN UTAMA ===
+        function updateSelection(selectedOption) {
+          coinOptions.forEach((option) => option.classList.remove("selected"));
+          selectedOption.classList.add("selected");
+          totalPriceElement.textContent = selectedOption.getAttribute("data-price");
+        }
+        function updateBalanceDisplay() {
+          const balanceElement = document.querySelector(".balance");
+          balanceElement.innerHTML = `<img src="coin.png" alt="TikTok Coin icon" />${currentBalance.toLocaleString()}`;
+          localStorage.setItem("tiktokBalance", currentBalance.toString());
+        }
+        coinOptions.forEach((option) => {
+          option.addEventListener("click", function () {
+            updateSelection(this);
+          });
+        });
+        const defaultSelected = document.querySelector(".coin-option.selected");
+        if (defaultSelected) {
+          updateSelection(defaultSelected);
+        }
+        updateBalanceDisplay();
+
+        // === ELEMEN & VARIABEL HALAMAN CUSTOM ===
+        const customPage = document.getElementById("custom-page");
+        const backdrop = document.getElementById("backdrop");
+        const backButton = document.getElementById("back-to-main");
+        const keypad = document.querySelector("#custom-page .keypad");
+        const coinDisplay = document.getElementById("custom-coin-display");
+        const priceDisplay = document.getElementById("custom-price-display");
+        const totalPriceDisplay = document.getElementById("custom-total-price");
+        const customRechargeButton = document.getElementById("custom-recharge-button");
+        let customCoinAmount = "0";
+        const COIN_TO_IDR_RATE = 193.5128;
+        const IDR_TO_USD_RATE = 16000;
+
+        // === FUNGSI HALAMAN CUSTOM ===
+        function formatNumber(numStr) {
+          return !numStr || numStr === "0" ? "0" : parseInt(numStr).toLocaleString("en-US");
+        }
+        function formatCurrency(num) {
+          return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2 }).format(num);
+        }
+        function updateCustomDisplay() {
+          if (customCoinAmount === "") customCoinAmount = "0";
+          if (customCoinAmount.length > 9) customCoinAmount = customCoinAmount.substring(0, 9);
+          coinDisplay.textContent = formatNumber(customCoinAmount);
+          const coinValue = parseInt(customCoinAmount) || 0;
+          const priceInIDR = coinValue * COIN_TO_IDR_RATE;
+          const priceInUSD = priceInIDR / IDR_TO_USD_RATE;
+          const formattedPrice = formatCurrency(priceInUSD);
+          priceDisplay.textContent = formattedPrice;
+          totalPriceDisplay.textContent = formattedPrice;
+        }
+
+        // === EVENT LISTENER NAVIGASI ===
+        customButton.addEventListener("click", () => {
+          if (!validateUsername()) return; // Validasi sebelum buka custom
+          backdrop.classList.remove("hidden");
+          setTimeout(() => backdrop.classList.add("visible"), 10);
+          customPage.classList.add("visible");
+        });
+        function closeCustomPage() {
+          backdrop.classList.remove("visible");
+          setTimeout(() => backdrop.classList.add("hidden"), 300);
+          customPage.classList.remove("visible");
+          customCoinAmount = "0";
+          updateCustomDisplay();
+        }
+        backButton.addEventListener("click", closeCustomPage);
+        backdrop.addEventListener("click", closeCustomPage);
+        keypad.addEventListener("click", function (e) {
+          const button = e.target.closest("button");
+          if (!button) return;
+          const action = button.dataset.action;
+          const value = button.textContent;
+          if (action === "backspace") {
+            customCoinAmount = customCoinAmount.length > 1 ? customCoinAmount.slice(0, -1) : "0";
+          } else {
+            customCoinAmount = customCoinAmount === "0" ? value : customCoinAmount + value;
+          }
+          updateCustomDisplay();
+        });
+
+        // === LOGIKA POPUP ORDER SUMMARY ===
+        const modalBackdrop = document.getElementById("order-summary-backdrop");
+        const modal = document.getElementById("order-summary-modal");
+        const closeModalButton = document.getElementById("close-modal-button");
+        const payNowButton = document.getElementById("pay-now-button");
+        const paymentOptions = document.querySelectorAll('input[name="payment"]');
+        let activePurchase = { coins: 0, price: "$0.00" };
+
+        function showOrderSummary(coins, price, username) {
+          document.getElementById("modal-account-name").textContent = username || "@username";
+          document.getElementById("modal-coin-amount").textContent = `${parseInt(coins).toLocaleString()} Coins`;
+          document.getElementById("modal-total-price").textContent = price;
+          document.getElementById("modal-subtotal-price").textContent = price;
+          document.querySelector('input[name="payment"][value="paypal"]').checked = true;
+          payNowButton.disabled = false;
+          activePurchase.coins = parseInt(coins);
+          activePurchase.price = price;
+          modalBackdrop.classList.remove("hidden");
+          modal.classList.remove("hidden");
+          modalBackdrop.classList.add("visible");
+          modal.classList.add("visible");
+        }
+        function closeOrderSummary() {
+          modalBackdrop.classList.remove("visible");
+          modal.classList.remove("visible");
+          setTimeout(() => {
+            modalBackdrop.classList.add("hidden");
+            modal.classList.add("hidden");
+          }, 300);
+          payNowButton.disabled = true;
+          paymentOptions.forEach((opt) => (opt.checked = false));
+        }
+
+        mainRechargeButton.addEventListener("click", function () {
+          if (!validateUsername()) return; // Jalankan validasi
+          const selectedOption = document.querySelector(".coin-option.selected");
+          if (selectedOption) {
+            this.classList.add("button--loading");
+            setTimeout(() => {
+              this.classList.remove("button--loading");
+              const coins = selectedOption.getAttribute("data-coins").replace(",", "");
+              const price = selectedOption.getAttribute("data-price");
+              const username = usernameInput.value;
+              showOrderSummary(coins, price, username);
+            }, 300);
+          }
+        });
+
+        customRechargeButton.addEventListener("click", function () {
+          // Username sudah divalidasi saat tombol custom awal di klik
+          const coins = customCoinAmount.replace(/,/g, "");
+          if (!coins || parseInt(coins) === 0) {
+            alert("Please enter a number of coins.");
+            return;
+          }
+          this.classList.add("button--loading");
+          setTimeout(() => {
+            this.classList.remove("button--loading");
+            const price = totalPriceDisplay.textContent;
+            const username = usernameInput.value;
+            showOrderSummary(coins, price, username);
+          }, 300);
+        });
+
+        closeModalButton.addEventListener("click", closeOrderSummary);
+        modalBackdrop.addEventListener("click", closeOrderSummary);
+        paymentOptions.forEach((option) => {
+          option.addEventListener("change", () => {
+            payNowButton.disabled = false;
+          });
+        });
+
+        payNowButton.addEventListener("click", function () {
+          if (this.disabled) return;
+          if (!validateUsername()) return;
+
+          const username = usernameInput.value;
+          this.classList.add("button--loading");
+
+          // 1. Panggil fungsi untuk menutup modal order summary
+          closeOrderSummary();
+
+          // 2. Tunggu hingga animasi penutupan SELESAI (misal 400ms, sedikit lebih lama dari transisi)
+          setTimeout(() => {
+            // Hentikan loading di tombol "Pay Now"
+            this.classList.remove("button--loading");
+
+            // Update saldo di belakang layar
+            currentBalance += activePurchase.coins;
+            updateBalanceDisplay();
+
+            // 3. BARU tampilkan modal sukses
+            showSuccessModal(activePurchase.coins, username);
+          }, 500); // Jeda ini PENTING untuk mencegah tumpang tindih
+        });
+      });
+    </script>
+
+    <!-- Payment Processing Modal -->
+    <div id="payment-processing-backdrop" class="hidden"></div>
+    <div id="payment-processing-modal" class="hidden">
+      <img src="tiktokload.gif" alt="Loading..." class="processing-gif" />
+      <h2 class="processing-title">Processing your payment</h2>
+      <p class="processing-subtitle">This could take a few minutes</p>
+      <div class="countdown-timer" id="countdown-display">05:00</div>
+    </div>
+
+    <div id="success-backdrop" class="hidden"></div>
+    <div id="success-modal" class="hidden">
+      <span id="close-success-modal" class="close-button">&times;</span>
+      <div class="success-icon">
+        <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
+          <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none" />
+          <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8" />
+        </svg>
+      </div>
+      <h2>Payment completed</h2>
+      <p id="success-message">You recharged 700 coins to your account. You can use coins to send virtual gifts to creators.</p>
+      <button id="go-back-button">Go back</button>
+    </div>
+  </body>
+</html>
