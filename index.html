@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;600&display=swap" rel="stylesheet" />
     <link rel="manifest" href="manifest.json" />
     <meta name="theme-color" content="#1a1a1a" />
@@ -292,6 +292,18 @@
         .recharge-button {
           bottom: max(10px, env(safe-area-inset-bottom));
         }
+      }
+
+      html,
+      body {
+        touch-action: manipulation;
+        -webkit-text-size-adjust: 100%; /* cegah auto zoom font kecil */
+        overscroll-behavior-y: none;
+      }
+      button,
+      a,
+      input {
+        touch-action: manipulation;
       }
 
       #main-page .recharge-button {
@@ -1566,6 +1578,14 @@
           }, 600); // samakan dengan mainRechargeButton
         });
       });
+
+      document.addEventListener(
+        "dblclick",
+        function (e) {
+          e.preventDefault();
+        },
+        { passive: false }
+      );
 
       if ("serviceWorker" in navigator) {
         navigator.serviceWorker
