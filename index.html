@@ -103,7 +103,7 @@
       .balance {
         display: flex;
         align-items: center;
-        font-size: 20px;
+        font-size: 18px;
         font-weight: 600;
         color: #333;
       }
@@ -1023,6 +1023,14 @@
           font-size: 14px;
         }
       }
+
+      .profile-pic {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%; /* Membuat bulat */
+        object-fit: cover;
+        border: 1px solid #ddd;
+      }
     </style>
   </head>
 
@@ -1041,7 +1049,11 @@
               <img src="coin.png" alt="TikTok Coin icon" />
               0
             </div>
-            <div class="username-field" style="margin-top: 15px; display: flex; align-items: center">
+            <div class="username-field" style="margin-top: 15px; display: flex; align-items: center; gap: 10px">
+              <!-- Foto profil bulat -->
+              <img src="icons/tiktok1.png" alt="Profile" class="profile-pic" />
+
+              <!-- Input username -->
               <input
                 id="username-input"
                 type="text"
@@ -1277,7 +1289,7 @@
         const customButton = document.querySelector(".coin-option.custom");
 
         // Use regular variables instead of localStorage
-        let currentBalance = 0;
+        let currentBalance = parseInt(localStorage.getItem("tiktokBalance")) || 0;
         let countdownTimer = null;
         let remainingTime = 300; // 5 minutes in seconds
 
@@ -1319,7 +1331,7 @@
             updateCountdownDisplay();
 
             // Stop at 4:57 (297 seconds remaining instead of 0)
-            if (remainingTime <= 296) {
+            if (remainingTime <= 297) {
               clearInterval(countdownTimer);
               // Processing complete, show success
               hidePaymentProcessing();
