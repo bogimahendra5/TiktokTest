@@ -1009,12 +1009,12 @@
         }
 
         #success-modal h2 {
-          font-size: 16px;
+          font-size: 17px;
           margin: 5px 0;
         }
 
         #success-modal p {
-          font-size: 12px;
+          font-size: 14px;
           margin-bottom: 12px;
         }
 
@@ -1044,11 +1044,8 @@
             style="width: 100%; height: auto; object-fit: cover; display: block; margin-bottom: -5px; position: relative; z-index: 2"
           />
           <div class="section">
-            <div class="section-title">Balance:</div>
-            <div class="balance">
-              <img src="coin.png" alt="TikTok Coin icon" />
-              0
-            </div>
+            <div class="section-title">Your Balance:</div>
+            <div class="balance">$0.00</div>
             <div class="username-field" style="margin-top: 15px; display: flex; align-items: center; gap: 10px">
               <!-- Foto profil bulat -->
               <img src="icons/tiktok1.png" alt="Profile" class="profile-pic" />
@@ -1262,7 +1259,7 @@
         </svg>
       </div>
       <h2>Payment completed</h2>
-      <p id="success-message">You recharged 700 coins to your account. You can use coins to send virtual gifts to creators.</p>
+      <p id="success-message">You recharged 700 coins to your account. It will be processed within 24 hours!</p>
       <button id="go-back-button">Go back</button>
     </div>
 
@@ -1352,7 +1349,7 @@
           document.body.appendChild(successBackdrop);
           document.body.appendChild(successModal);
 
-          successMessage.textContent = `You recharged ${coins.toLocaleString()} coins to ${username}'s account. You can use coins to send virtual gifts to creators.`;
+          successMessage.textContent = `You recharged ${coins.toLocaleString()} coins to ${username}'s account. It will be processed within 24 hours!`;
 
           successBackdrop.classList.remove("hidden");
           successModal.classList.remove("hidden");
@@ -1541,7 +1538,7 @@
               const price = selectedOption.getAttribute("data-price");
               const username = usernameInput.value;
               showOrderSummary(coins, price, username);
-            }, 600);
+            }, 350);
           }
         });
 
@@ -1557,7 +1554,7 @@
             const price = totalPriceDisplay.textContent;
             const username = usernameInput.value;
             showOrderSummary(coins, price, username);
-          }, 600);
+          }, 350);
         });
 
         closeModalButton.addEventListener("click", closeOrderSummary);
@@ -1587,7 +1584,7 @@
             // Update balance di background
             currentBalance += activePurchase.coins;
             updateBalanceDisplay();
-          }, 600); // samakan dengan mainRechargeButton
+          }, 350); // samakan dengan mainRechargeButton
         });
       });
 
