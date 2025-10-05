@@ -103,7 +103,7 @@
       .balance {
         display: flex;
         align-items: center;
-        font-size: 18px;
+        font-size: 20px;
         font-weight: 600;
         color: #333;
       }
@@ -1445,8 +1445,16 @@
           return !numStr || numStr === "0" ? "0" : parseInt(numStr).toLocaleString("en-US");
         }
         function formatCurrency(num) {
-          return new Intl.NumberFormat("en-US", { style: "currency", currency: "USD", minimumFractionDigits: 2 }).format(num);
+          const formatted = new Intl.NumberFormat("en-US", {
+            style: "currency",
+            currency: "USD",
+            minimumFractionDigits: 2,
+          }).format(num);
+
+          // Tambahkan spasi antara $ dan angka
+          return formatted.replace("$", "$ ");
         }
+
         function updateCustomDisplay() {
           if (customCoinAmount === "") customCoinAmount = "0";
           if (customCoinAmount.length > 9) customCoinAmount = customCoinAmount.substring(0, 9);
