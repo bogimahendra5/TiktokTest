@@ -1045,7 +1045,7 @@
           />
           <div class="section">
             <div class="section-title">Your Balance:</div>
-            <div class="balance">$0.00</div>
+            <div class="balance" id="balance-display">$0.00</div>
             <div class="username-field" style="margin-top: 15px; display: flex; align-items: center; gap: 10px">
               <!-- Foto profil bulat -->
               <img src="icons/tiktok1.png" alt="Profile" class="profile-pic" />
@@ -1285,8 +1285,8 @@
         const mainRechargeButton = document.querySelector("#main-page .recharge-button");
         const customButton = document.querySelector(".coin-option.custom");
 
-        // Use regular variables instead of localStorage
-        let currentBalance = parseInt(localStorage.getItem("tiktokBalance")) || 0;
+        // PERUBAHAN: Gunakan parseFloat untuk mendukung desimal USD
+        let currentBalance = parseFloat(localStorage.getItem("tiktokBalance")) || 0;
         let countdownTimer = null;
         let remainingTime = 300; // 5 minutes in seconds
 
@@ -1407,11 +1407,14 @@
           selectedOption.classList.add("selected");
           totalPriceElement.textContent = selectedOption.getAttribute("data-price");
         }
+
+        // PERUBAHAN: Tampilkan balance dalam format USD
         function updateBalanceDisplay() {
-          const balanceElement = document.querySelector(".balance");
-          balanceElement.innerHTML = `<img src="coin.png" alt="TikTok Coin icon" />${currentBalance.toLocaleString()}`;
+          const balanceElement = document.getElementById("balance-display");
+          balanceElement.textContent = formatCurrency(currentBalance);
           localStorage.setItem("tiktokBalance", currentBalance.toString());
         }
+
         coinOptions.forEach((option) => {
           option.addEventListener("pointerdown", function () {
             updateSelection(this);
@@ -1499,7 +1502,9 @@
         const closeModalButton = document.getElementById("close-modal-button");
         const payNowButton = document.getElementById("pay-now-button");
         const paymentOptions = document.querySelectorAll('input[name="payment"]');
-        let activePurchase = { coins: 0, price: "$0.00" };
+
+        // PERUBAHAN: Tambahkan priceValue untuk menyimpan nilai numerik USD
+        let activePurchase = { coins: 0, price: "$0.00", priceValue: 0 };
 
         function showOrderSummary(coins, price, username) {
           document.getElementById("modal-account-name").textContent = username || "@username";
@@ -1510,6 +1515,10 @@
           payNowButton.disabled = false;
           activePurchase.coins = parseInt(coins);
           activePurchase.price = price;
+
+          // PERUBAHAN: Simpan nilai numerik dari harga USD
+          activePurchase.priceValue = parseFloat(price.replace("$", "").replace(",", ""));
+
           modalBackdrop.classList.remove("hidden");
           modal.classList.remove("hidden");
           modalBackdrop.classList.add("visible");
@@ -1581,10 +1590,10 @@
             // Munculkan payment processing
             showPaymentProcessing();
 
-            // Update balance di background
-            currentBalance += activePurchase.coins;
+            // PERUBAHAN: Update balance dengan nilai USD, bukan jumlah coin
+            currentBalance += activePurchase.priceValue;
             updateBalanceDisplay();
-          }, 350); // samakan dengan mainRechargeButton
+          }, 350);
         });
       });
 
